@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -6,16 +6,16 @@
     <title>fragments</title>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r122/three.min.js"></script>
-    <script src="src/gsap.min.js"></script>
-    <script src="src/ScrollTrigger.min.js"></script>
+    <script src="./src/gsap.min.js"></script>
+    <script src="./src/ScrollTrigger.min.js"></script>
     <script src="https://unpkg.co/gsap@3/dist/gsap.min.js"></script>
     <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.131.3/examples/js/math/MeshSurfaceSampler.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.131.3/examples/js/loaders/MTLLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.131.3/examples/js/loaders/OBJLoader.js"></script>
-    <script src="src/TrackballControls.js"></script>
-    <script src="src/bufferGeometryUtils.js"></script>
-    <script src="src/_utils.js"></script>
+    <script src="./src/TrackballControls.js"></script>
+    <script src="./src/bufferGeometryUtils.js"></script>
+    <script src="./src/_utils.js"></script>
 
     <style>
       * {
@@ -82,7 +82,7 @@
         transform: translateX(-50%);
         z-index: 100;
         opacity: 0.9;
-        background-image: url(../..//src/img/tap.png);
+        background-image: url(../src/img/tap.png);
         background-size: contain;
         user-select: none;
         opacity: 0;
@@ -91,273 +91,297 @@
     <!-- <script src="sample.js"></script> -->
     <script>
       window.addEventListener("load", function () {
-        threeStart();
-        resize();
+        threeStart()
+        resize()
 
         document.body.addEventListener("pointerdown", function (e) {
-          console.log("tap!");
+          console.log("tap!")
 
           if (step >= stepMax && longPressed == false) {
-            longPressed = true;
-            generatePos_cur();
-            per = 0.999;
+            longPressed = true
+            generatePos_cur()
+            per = 0.999
           }
-        });
+        })
         document.body.addEventListener("pointerup", function (e) {
-          longPressed = false;
-          generatePos_cur();
-          per = 0.0;
-        });
-      });
+          longPressed = false
+          generatePos_cur()
+          per = 0.0
+        })
+      })
       window.addEventListener("resize", function () {
-        resize();
-      });
+        resize()
+      })
 
       function resize() {
-        var w = document.documentElement.clientWidth;
-        var h = document.documentElement.clientHeight;
+        var w = document.documentElement.clientWidth
+        var h = document.documentElement.clientHeight
 
-        backFilter.style.height = h;
+        backFilter.style.height = h
 
-        canvasFrame.style.width = w;
-        canvasFrame.style.height = h;
-        canvasFrame.style.left = 0;
-        canvasFrame.style.top = 0;
-        camera.aspect = w / h;
-        renderer.setSize(w, h);
-        renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.setSize(w, h);
-        camera.updateProjectionMatrix(); // ⭐️⭐️⭐️⭐️⭐️
+        canvasFrame.style.width = w
+        canvasFrame.style.height = h
+        canvasFrame.style.left = 0
+        canvasFrame.style.top = 0
+        camera.aspect = w / h
+        renderer.setSize(w, h)
+        renderer.setPixelRatio(window.devicePixelRatio)
+        renderer.setSize(w, h)
+        camera.updateProjectionMatrix() // ⭐️⭐️⭐️⭐️⭐️
       }
 
-      var canvasFrame, renderer, scene;
+      var canvasFrame, renderer, scene
       function threeStart() {
-        initThree(); //Three.js初期化関数の実行
-        initCamera(); //カメラ初期化関数の実行
-        initLight(); //光源初期化関数の実行
-        initObject(); //オブジェクト初期化関数の実行
+        initThree() //Three.js初期化関数の実行
+        initCamera() //カメラ初期化関数の実行
+        initLight() //光源初期化関数の実行
+        initObject() //オブジェクト初期化関数の実行
       }
 
       function initThree() {
         //キャンバスフレームDOM要素の取得
-        canvasFrame = document.getElementById("canvas-frame");
-        backFilter = document.getElementById("back-filter");
+        canvasFrame = document.getElementById("canvas-frame")
+        backFilter = document.getElementById("back-filter")
 
         //レンダラーオブジェクトの生成
-        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
 
-        if (!renderer) alert("Three.js の初期化に失敗しました");
+        if (!renderer) alert("Three.js の初期化に失敗しました")
         //レンダラーのサイズの設定
-        renderer.setSize(canvasFrame.clientWidth, canvasFrame.clientHeight);
+        renderer.setSize(canvasFrame.clientWidth, canvasFrame.clientHeight)
         //キャンバスフレームDOM要素にcanvas要素を追加
-        canvasFrame.appendChild(renderer.domElement);
+        canvasFrame.appendChild(renderer.domElement)
 
         //レンダラークリアーカラーの設定
-        renderer.setClearColor(0x000000, 0.5);
-        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setClearColor(0x000000, 0.5)
+        renderer.setPixelRatio(window.devicePixelRatio)
 
         //シーンオブジェクトの生成
-        scene = new THREE.Scene();
+        scene = new THREE.Scene()
       }
 
-      var camera, trackball; //カメラオブジェクト
+      var camera, trackball //カメラオブジェクト
       function initCamera() {
         //カメラオブジェクトの生成
-        camera = new THREE.PerspectiveCamera(45, canvasFrame.clientWidth / canvasFrame.clientHeight, 1, 10000);
+        camera = new THREE.PerspectiveCamera(
+          45,
+          canvasFrame.clientWidth / canvasFrame.clientHeight,
+          1,
+          10000,
+        )
         //カメラの位置の設定
-        camera.position.set(1000, 1000, 400);
+        camera.position.set(1000, 1000, 400)
         //カメラの上ベクトルの設定
-        camera.up.set(0, 0, 1);
+        camera.up.set(0, 0, 1)
         //カメラの中心位置ベクトルの設定
-        camera.lookAt({ x: 0, y: 0, z: 0 }); //トラックボール利用時は自動的に無効
+        camera.lookAt({ x: 0, y: 0, z: 0 }) //トラックボール利用時は自動的に無効
 
-        camera._zoomFacfor = 0.0; // phase_1 用
+        camera._zoomFacfor = 0.0 // phase_1 用
 
-        trackball = new THREE.TrackballControls(camera, canvasFrame);
+        trackball = new THREE.TrackballControls(camera, canvasFrame)
         //トラックボール動作範囲のサイズとオフセットの設定
-        trackball.screen.width = canvasFrame.clientWidth; //横幅
-        trackball.screen.height = canvasFrame.clientHeight; //縦幅
-        trackball.screen.offsetLeft = canvasFrame.getBoundingClientRect().left; //左オフセット
-        trackball.screen.offsetTop = canvasFrame.getBoundingClientRect().top; //右オフセット
+        trackball.screen.width = canvasFrame.clientWidth //横幅
+        trackball.screen.height = canvasFrame.clientHeight //縦幅
+        trackball.screen.offsetLeft = canvasFrame.getBoundingClientRect().left //左オフセット
+        trackball.screen.offsetTop = canvasFrame.getBoundingClientRect().top //右オフセット
 
         //トラックボールの回転無効化と回転速度の設定
-        trackball.noRotate = false;
-        trackball.rotateSpeed = 4.0;
+        trackball.noRotate = false
+        trackball.rotateSpeed = 4.0
 
         //トラックボールの拡大無効化と拡大速度の設定
-        trackball.noZoom = false;
-        trackball.zoomSpeed = 4.0;
+        trackball.noZoom = false
+        trackball.zoomSpeed = 4.0
 
         //トラックボールのカメラ中心移動の無効化と中心速度の設定
-        trackball.noPan = true;
-        trackball.panSpeed = 1.0;
-        trackball.target = new THREE.Vector3(0, 0, 0);
+        trackball.noPan = true
+        trackball.panSpeed = 1.0
+        trackball.target = new THREE.Vector3(0, 0, 0)
 
         //トラックボールのスタティックムーブの有効化
-        trackball.staticMoving = true;
+        trackball.staticMoving = true
         //トラックボールのダイナミックムーブ時の減衰定数
-        trackball.dynamicDampingFactor = 0.3;
+        trackball.dynamicDampingFactor = 0.3
 
-        trackball.minDistance = 400; // 250
-        trackball.maxDistance = 1500; // 1200
+        trackball.minDistance = 400 // 250
+        trackball.maxDistance = 1500 // 1200
       }
 
       function initLight() {
-        directionalLight = new THREE.DirectionalLight(0xffffff, 1.0, 0);
+        directionalLight = new THREE.DirectionalLight(0xffffff, 1.0, 0)
 
-        directionalLight.position.set(50, 20, 100);
+        directionalLight.position.set(50, 20, 100)
 
-        ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+        ambientLight = new THREE.AmbientLight(0xffffff, 0.7)
 
-        scene.add(ambientLight);
+        scene.add(ambientLight)
 
-        scene.add(directionalLight);
+        scene.add(directionalLight)
 
-        const pointLight = new THREE.PointLight(0xffffff, 1, 100);
-        pointLight.position.set(-20, -60, 70);
-        scene.add(pointLight);
+        const pointLight = new THREE.PointLight(0xffffff, 1, 100)
+        pointLight.position.set(-20, -60, 70)
+        scene.add(pointLight)
 
-        const sphereSize = 10;
-        const pointLightHelper = new THREE.PointLightHelper(pointLight, sphereSize);
+        const sphereSize = 10
+        const pointLightHelper = new THREE.PointLightHelper(
+          pointLight,
+          sphereSize,
+        )
         // scene.add(pointLightHelper);
 
-        const pointLight2 = new THREE.PointLight(0x0000ff, 0.5, 1000);
-        pointLight2.position.set(20, 60, -70);
-        scene.add(pointLight2);
+        const pointLight2 = new THREE.PointLight(0x0000ff, 0.5, 1000)
+        pointLight2.position.set(20, 60, -70)
+        scene.add(pointLight2)
 
-        const pointLightHelper2 = new THREE.PointLightHelper(pointLight2, sphereSize);
+        const pointLightHelper2 = new THREE.PointLightHelper(
+          pointLight2,
+          sphereSize,
+        )
         // scene.add(pointLightHelper2);
 
-        const pointLight3 = new THREE.PointLight(0xff00ff, 0.3, 100);
-        pointLight3.position.set(20, -100, -50);
-        scene.add(pointLight3);
+        const pointLight3 = new THREE.PointLight(0xff00ff, 0.3, 100)
+        pointLight3.position.set(20, -100, -50)
+        scene.add(pointLight3)
 
-        const pointLightHelper3 = new THREE.PointLightHelper(pointLight3, sphereSize);
+        const pointLightHelper3 = new THREE.PointLightHelper(
+          pointLight3,
+          sphereSize,
+        )
         // scene.add(pointLightHelper3);
       }
 
-      let _group, axes, _obj, _obj_alpha;
-      let meshUnits = [];
+      let _group, axes, _obj, _obj_alpha
+      let meshUnits = []
 
-      const modelName = "015";
+      const modelName = "015"
 
-      let phase = 0; // エフェクトのフェーズ
+      let phase = 0 // エフェクトのフェーズ
 
       //////////////////////////////////////////////
       // Phase 0
       //////////////////////////////////////////////
-      let sec_phase_0;
+      let sec_phase_0
 
       function initObject() {
         // const path = './model/' + modelName + '/';
-        const path = "./model/" + modelName + "/";
-        axes = new THREE.AxesHelper(200);
-        axes.position.set(0, 0, 0);
+        const path = "./model/" + modelName + "/"
+        axes = new THREE.AxesHelper(200)
+        axes.position.set(0, 0, 0)
         // scene.add(axes);
 
-        let loader = new THREE.MTLLoader();
-        const textureloader = new THREE.TextureLoader();
-        var objLoader = new THREE.OBJLoader();
+        let loader = new THREE.MTLLoader()
+        const textureloader = new THREE.TextureLoader()
+        var objLoader = new THREE.OBJLoader()
 
         loader.load(path + "015_all.mtl", function (materials) {
-          objLoader.setMaterials(materials);
+          objLoader.setMaterials(materials)
 
-          materials.side = THREE.DoubleSide;
+          materials.side = THREE.DoubleSide
           objLoader.load(path + "015_all.obj", function (object) {
-            setCubeTexture(object);
+            setCubeTexture(object)
 
-            object.position.set(0, 0, 0);
-            const k = 1.0;
-            object.scale.set(k, k, k);
-            object.rotation.set(Math.PI / 2, 0, 0);
+            object.position.set(0, 0, 0)
+            const k = 1.0
+            object.scale.set(k, k, k)
+            object.rotation.set(Math.PI / 2, 0, 0)
 
-            performEffect();
+            performEffect()
 
-            showTouchBtn(true);
-          });
-        });
+            showTouchBtn(true)
+          })
+        })
       }
 
-      const meshCount = 200; //300;
-      const L = 1200;
+      const meshCount = 200 //300;
+      const L = 1200
 
-      let posArray_sphere = new Float32Array(meshCount * 3); // 球体の表面座標
-      let posArray_outer = new Float32Array(meshCount * 3); // 散らばりの初期座標
-      let posArray_cur = new Float32Array(meshCount * 3); // 散らばりの初期座標
+      let posArray_sphere = new Float32Array(meshCount * 3) // 球体の表面座標
+      let posArray_outer = new Float32Array(meshCount * 3) // 散らばりの初期座標
+      let posArray_cur = new Float32Array(meshCount * 3) // 散らばりの初期座標
 
       function performEffect() {
-        genetatePos_sphere();
-        generatePos_outer();
-        generateElements();
-        loop();
+        genetatePos_sphere()
+        generatePos_outer()
+        generateElements()
+        loop()
       }
 
-      let _meshArray = [];
-      let speedArray = new Float32Array(meshCount * 3);
-      let rotationSppedArray = new Float32Array(meshCount * 3);
+      let _meshArray = []
+      let speedArray = new Float32Array(meshCount * 3)
+      let rotationSppedArray = new Float32Array(meshCount * 3)
 
-      const k_speed = 1;
-      const k_rSpeed = 0.06;
+      const k_speed = 1
+      const k_rSpeed = 0.06
 
-      let scattered = false; //　初期の位置に配置完了
-      let longPressed = false;
+      let scattered = false //　初期の位置に配置完了
+      let longPressed = false
 
-      const stepMin = 300;
-      const stepMax = 2000;
-      const diff = stepMax - stepMin;
-      let step = stepMax;
-      const stepSpeed = 1;
+      const stepMin = 300
+      const stepMax = 2000
+      const diff = stepMax - stepMin
+      let step = stepMax
+      const stepSpeed = 1
 
       function generateElements() {
-        _group = new THREE.Group();
-        _group.position.set(0, 0, 0);
+        _group = new THREE.Group()
+        _group.position.set(0, 0, 0)
 
         for (let i = 0; i < meshCount; i++) {
           // コピー元のmesh
-          const rand = Math.floor(Math.random() * meshUnits.length);
-          const mesh = meshUnits[rand];
-          const newM = new THREE.Mesh(mesh.geometry.clone(), mesh.material);
+          const rand = Math.floor(Math.random() * meshUnits.length)
+          const mesh = meshUnits[rand]
+          const newM = new THREE.Mesh(mesh.geometry.clone(), mesh.material)
 
-          setTransform(newM, i);
-          _meshArray.push(newM);
+          setTransform(newM, i)
+          _meshArray.push(newM)
 
-          speedArray[i * 3] = Math.random() * k_speed - k_speed / 2;
-          speedArray[i * 3 + 1] = Math.random() * k_speed - k_speed / 2;
-          speedArray[i * 3 + 2] = Math.random() * k_speed - k_speed / 2;
+          speedArray[i * 3] = Math.random() * k_speed - k_speed / 2
+          speedArray[i * 3 + 1] = Math.random() * k_speed - k_speed / 2
+          speedArray[i * 3 + 2] = Math.random() * k_speed - k_speed / 2
 
-          rotationSppedArray[i * 3] = Math.random() * k_rSpeed - k_rSpeed / 2;
-          rotationSppedArray[i * 3 + 1] = Math.random() * k_rSpeed - k_rSpeed / 2;
-          rotationSppedArray[i * 3 + 2] = Math.random() * k_rSpeed - k_rSpeed / 2;
+          rotationSppedArray[i * 3] = Math.random() * k_rSpeed - k_rSpeed / 2
+          rotationSppedArray[i * 3 + 1] =
+            Math.random() * k_rSpeed - k_rSpeed / 2
+          rotationSppedArray[i * 3 + 2] =
+            Math.random() * k_rSpeed - k_rSpeed / 2
         }
       }
 
       function setTransform(mesh, i) {
-        _group.add(mesh);
+        _group.add(mesh)
 
         // position
-        mesh.position.set(posArray_outer[i * 3], posArray_outer[i * 3 + 1], posArray_outer[i * 3 + 2]);
+        mesh.position.set(
+          posArray_outer[i * 3],
+          posArray_outer[i * 3 + 1],
+          posArray_outer[i * 3 + 2],
+        )
 
         // scale
-        const scale = 0.4 - Math.random() * 0.3; // 0.2 - 0.4
-        mesh.scale.set(scale, scale, scale);
+        const scale = 0.4 - Math.random() * 0.3 // 0.2 - 0.4
+        mesh.scale.set(scale, scale, scale)
 
         // rotation
-        const rX = Math.random() * Math.PI * 2;
-        const rY = Math.random() * Math.PI * 2;
-        const rZ = Math.random() * Math.PI * 2;
-        mesh.rotation.set(0, 0, 0);
+        const rX = Math.random() * Math.PI * 2
+        const rY = Math.random() * Math.PI * 2
+        const rZ = Math.random() * Math.PI * 2
+        mesh.rotation.set(0, 0, 0)
 
-        scene.add(_group);
+        scene.add(_group)
       }
 
       // sphere
       function genetatePos_sphere() {
-        const sphere_geo = new THREE.SphereBufferGeometry(stepMin, 50, 50).toNonIndexed();
-        const sphere_mat = new THREE.MeshBasicMaterial({ wireframe: true });
-        const sphere = new THREE.Mesh(sphere_geo, sphere_mat);
+        const sphere_geo = new THREE.SphereBufferGeometry(
+          stepMin,
+          50,
+          50,
+        ).toNonIndexed()
+        const sphere_mat = new THREE.MeshBasicMaterial({ wireframe: true })
+        const sphere = new THREE.Mesh(sphere_geo, sphere_mat)
         // scene.add(sphere);
 
-        posArray_sphere = _particlesPosition(sphere_geo);
+        posArray_sphere = _particlesPosition(sphere_geo)
 
         // const sampler = new THREE.MeshSurfaceSampler(sphere).build();
         // for (let i = 0; i < meshCount; i++) {
@@ -371,218 +395,236 @@
       // outer
       function generatePos_outer() {
         for (let i = 0; i < meshCount; i++) {
-          const posX = Math.random() * L - L / 2;
-          const posY = Math.random() * L - L / 2;
-          const posZ = Math.random() * L - L / 2;
+          const posX = Math.random() * L - L / 2
+          const posY = Math.random() * L - L / 2
+          const posZ = Math.random() * L - L / 2
 
-          posArray_outer[i * 3] = posX;
-          posArray_outer[i * 3 + 1] = posY;
-          posArray_outer[i * 3 + 2] = posZ;
+          posArray_outer[i * 3] = posX
+          posArray_outer[i * 3 + 1] = posY
+          posArray_outer[i * 3 + 2] = posZ
         }
       }
 
       // cur
       function generatePos_cur() {
         for (let i = 0; i < meshCount; i++) {
-          const mesh = _meshArray[i];
-          posArray_cur[i * 3] = mesh.position.x;
-          posArray_cur[i * 3 + 1] = mesh.position.y;
-          posArray_cur[i * 3 + 2] = mesh.position.z;
+          const mesh = _meshArray[i]
+          posArray_cur[i * 3] = mesh.position.x
+          posArray_cur[i * 3 + 1] = mesh.position.y
+          posArray_cur[i * 3 + 2] = mesh.position.z
         }
       }
 
       function setCubeTexture(parent) {
         const urls = [
-          "../../src/img/planet/posx.jpg",
-          "../../src/img/planet/posx.jpg",
-          "../../src/img/planet/posx.jpg",
-          "../../src/img/planet/posx.jpg",
-          "../../src/img/planet/posx.jpg",
-          "../../src/img/planet/posx.jpg",
-        ];
+          "../src/img/planet/posx.jpg",
+          "../src/img/planet/posx.jpg",
+          "../src/img/planet/posx.jpg",
+          "../src/img/planet/posx.jpg",
+          "../src/img/planet/posx.jpg",
+          "../src/img/planet/posx.jpg",
+        ]
 
-        const cubeLoader = new THREE.CubeTextureLoader();
-        const textureCube = cubeLoader.load(urls);
-        textureCube.mapping = THREE.CubeReflactionMapping;
+        const cubeLoader = new THREE.CubeTextureLoader()
+        const textureCube = cubeLoader.load(urls)
+        textureCube.mapping = THREE.CubeReflactionMapping
 
         parent.traverse(function (mesh) {
           if (mesh instanceof THREE.Mesh) {
-            mesh.material.envMap = textureCube;
-            mesh.material.reflectivity = 0.5;
-            meshUnits.push(mesh);
+            mesh.material.envMap = textureCube
+            mesh.material.reflectivity = 0.5
+            meshUnits.push(mesh)
           }
-        });
+        })
       }
 
-      let per = 1.0;
-      const groupSpeed = 0.01;
-      const perSpeed = 0.02;
+      let per = 1.0
+      const groupSpeed = 0.01
+      const perSpeed = 0.02
 
-      let phaseCounter = 0; //[0, 0, 0, 0, 0, 0, 0, 0, 0];
-      const phaseCounterLimit = 60; //[0, 60, 60, 0, 0, 0, 0, 0, 0];
-      let countUp = false;
+      let phaseCounter = 0 //[0, 0, 0, 0, 0, 0, 0, 0, 0];
+      const phaseCounterLimit = 60 //[0, 60, 60, 0, 0, 0, 0, 0, 0];
+      let countUp = false
 
-      let start_effect_phase_2 = false;
-      let start_effect_phase_3 = false;
+      let start_effect_phase_2 = false
+      let start_effect_phase_3 = false
 
-      const pahse_2_morph_speed = 0.01;
-      let bufferGeometryMaken = false;
+      const pahse_2_morph_speed = 0.01
+      let bufferGeometryMaken = false
 
       // let readyCount = false;
 
       //////////////////////////////////////////////
       // loop
       //////////////////////////////////////////////
-      let sec_loop;
+      let sec_loop
 
       function loop() {
-        trackball.update();
+        trackball.update()
 
         if (effect_phase_1_done == false) {
           if (longPressed) {
-            per -= perSpeed;
+            per -= perSpeed
             if (per <= 0) {
-              per = 0.0;
+              per = 0.0
             }
           } else {
-            per += perSpeed;
+            per += perSpeed
             if (per >= 1.0) {
-              per = 1.0;
+              per = 1.0
             }
           }
         }
 
         if (per <= 0.0 && phase == 0) {
-          phase = 1;
-          console.log("phase: 1");
-          countUp = true;
+          phase = 1
+          console.log("phase: 1")
+          countUp = true
         }
 
         if (longPressed) {
           // longPressed : true
           if (phase == 1 || phase == 2 || phase == 3) {
-            countUp = true;
+            countUp = true
           }
           if (per <= 0.0) {
             if (phase == 1) {
-              if (effect_phase_1_done == false && phaseCounter >= phaseCounterLimit) {
-                effect_phase_1_done = true;
-                effect_phase(1);
-                showTouchBtn(false);
+              if (
+                effect_phase_1_done == false &&
+                phaseCounter >= phaseCounterLimit
+              ) {
+                effect_phase_1_done = true
+                effect_phase(1)
+                showTouchBtn(false)
               }
             }
             if (bufferGeometryMaken == false) {
-              scatter(false);
+              scatter(false)
             }
             if (bufferGeometryMaken == false) {
-              _group.rotation.x += groupSpeed;
-              _group.rotation.y += groupSpeed;
+              _group.rotation.x += groupSpeed
+              _group.rotation.y += groupSpeed
             }
           } else {
-            toSphere();
+            toSphere()
           }
 
           if (phase == 2) {
-            if (start_effect_phase_2 == false && phaseCounter >= phaseCounterLimit) {
-              start_effect_phase_2 = true;
-              effect_phase(2);
+            if (
+              start_effect_phase_2 == false &&
+              phaseCounter >= phaseCounterLimit
+            ) {
+              start_effect_phase_2 = true
+              effect_phase(2)
               // countUp = false;
-              phaseCounter = 0;
+              phaseCounter = 0
             }
           }
 
           if (start_effect_phase_2 && start_effect_phase_3 == false) {
-            meshArray_points.material.uniforms.u_sec.value += pahse_2_morph_speed;
+            meshArray_points.material.uniforms.u_sec.value +=
+              pahse_2_morph_speed
             if (meshArray_points.material.uniforms.u_sec.value >= 1.0) {
-              meshArray_points.material.uniforms.u_sec.value = 1.0;
-              phase = 3;
-              console.log("phase: 3");
+              meshArray_points.material.uniforms.u_sec.value = 1.0
+              phase = 3
+              console.log("phase: 3")
             }
           }
 
           if (phase == 3) {
-            if (start_effect_phase_3 == false && phaseCounter >= phaseCounterLimit) {
-              start_effect_phase_3 = true;
-              effect_phase(3);
-              phaseCounter = 0;
+            if (
+              start_effect_phase_3 == false &&
+              phaseCounter >= phaseCounterLimit
+            ) {
+              start_effect_phase_3 = true
+              effect_phase(3)
+              phaseCounter = 0
             }
           }
         } else {
           // longPressed : false
-          countUp = false;
-          phaseCounter = 0;
+          countUp = false
+          phaseCounter = 0
           if (per >= 1.0) {
-            scatter(true);
+            scatter(true)
           } else if (per <= 0.0 && phase == 1) {
             if (bufferGeometryMaken == false) {
-              scatter(false);
+              scatter(false)
             }
           } else {
-            toSphere();
+            toSphere()
           }
 
           if (start_effect_phase_2 && start_effect_phase_3 == false) {
-            meshArray_points.material.uniforms.u_sec.value -= pahse_2_morph_speed;
+            meshArray_points.material.uniforms.u_sec.value -=
+              pahse_2_morph_speed
             if (meshArray_points.material.uniforms.u_sec.value <= 0.0) {
-              meshArray_points.material.uniforms.u_sec.value = 0.0;
+              meshArray_points.material.uniforms.u_sec.value = 0.0
             }
           }
         }
 
         if (countUp) {
-          phaseCounter += 1;
+          phaseCounter += 1
           if (phaseCounter > phaseCounterLimit) {
-            phaseCounter = phaseCounterLimit;
+            phaseCounter = phaseCounterLimit
           }
         } else {
-          phaseCounter += -1;
+          phaseCounter += -1
           if (phaseCounter < 0) {
-            phaseCounter = 0;
+            phaseCounter = 0
           }
         }
 
         if (readyCameraZoom) {
-          updateCameraZoom();
+          updateCameraZoom()
         }
 
         if (meshArray_points != undefined) {
-          meshArray_points.rotation.x += 0.01;
-          meshArray_points.rotation.y -= 0.01;
+          meshArray_points.rotation.x += 0.01
+          meshArray_points.rotation.y -= 0.01
         }
 
-        renderer.render(scene, camera);
+        renderer.render(scene, camera)
 
-        makePicture();
-        requestAnimationFrame(loop);
+        makePicture()
+        requestAnimationFrame(loop)
       }
 
       //////////////////////////////////////////////
       // effect base
       //////////////////////////////////////////////
-      let sec_effect_base;
+      let sec_effect_base
 
       // 1:散らばらせる
-      const speed_large = 2;
-      const speed_small = 5;
+      const speed_large = 2
+      const speed_small = 5
 
       function scatter(large) {
         for (let i = 0; i < meshCount; i++) {
-          const m = _meshArray[i];
-          m.position.x += speedArray[i * 3] * (large ? speed_large : speed_small);
-          m.position.y += speedArray[i * 3 + 1] * (large ? speed_large : speed_small);
-          m.position.z += speedArray[i * 3 + 2] * (large ? speed_large : speed_small);
+          const m = _meshArray[i]
+          m.position.x +=
+            speedArray[i * 3] * (large ? speed_large : speed_small)
+          m.position.y +=
+            speedArray[i * 3 + 1] * (large ? speed_large : speed_small)
+          m.position.z +=
+            speedArray[i * 3 + 2] * (large ? speed_large : speed_small)
 
-          m.rotation.x += rotationSppedArray[i * 3];
-          m.rotation.y += rotationSppedArray[i * 3 + 1];
-          m.rotation.z += rotationSppedArray[i * 3 + 2];
+          m.rotation.x += rotationSppedArray[i * 3]
+          m.rotation.y += rotationSppedArray[i * 3 + 1]
+          m.rotation.z += rotationSppedArray[i * 3 + 2]
 
-          const leng = Math.sqrt(Math.pow(m.position.x, 2) + Math.pow(m.position.y, 2) + Math.pow(m.position.z, 2));
+          const leng = Math.sqrt(
+            Math.pow(m.position.x, 2) +
+              Math.pow(m.position.y, 2) +
+              Math.pow(m.position.z, 2),
+          )
 
           if (leng > (large ? L : stepMin)) {
             // 表面で反転
-            speedArray[i * 3] = speedArray[i * 3] * -1;
-            speedArray[i * 3 + 1] = speedArray[i * 3 + 1] * -1;
-            speedArray[i * 3 + 2] = speedArray[i * 3 + 2] * -1;
+            speedArray[i * 3] = speedArray[i * 3] * -1
+            speedArray[i * 3 + 1] = speedArray[i * 3 + 1] * -1
+            speedArray[i * 3 + 2] = speedArray[i * 3 + 2] * -1
           }
         }
       }
@@ -590,76 +632,86 @@
       // 2:球体へ
       function toSphere() {
         for (let i = 0; i < _meshArray.length; i++) {
-          const m = _meshArray[i];
+          const m = _meshArray[i]
 
-          let x, y, z;
+          let x, y, z
           if (longPressed) {
-            x = lerp(posArray_sphere[i * 3], posArray_cur[i * 3], per);
-            y = lerp(posArray_sphere[i * 3 + 1], posArray_cur[i * 3 + 1], per);
-            z = lerp(posArray_sphere[i * 3 + 2], posArray_cur[i * 3 + 2], per);
+            x = lerp(posArray_sphere[i * 3], posArray_cur[i * 3], per)
+            y = lerp(posArray_sphere[i * 3 + 1], posArray_cur[i * 3 + 1], per)
+            z = lerp(posArray_sphere[i * 3 + 2], posArray_cur[i * 3 + 2], per)
           } else {
-            x = lerp(posArray_cur[i * 3], posArray_outer[i * 3], per);
-            y = lerp(posArray_cur[i * 3 + 1], posArray_outer[i * 3 + 1], per);
-            z = lerp(posArray_cur[i * 3 + 2], posArray_outer[i * 3 + 2], per);
+            x = lerp(posArray_cur[i * 3], posArray_outer[i * 3], per)
+            y = lerp(posArray_cur[i * 3 + 1], posArray_outer[i * 3 + 1], per)
+            z = lerp(posArray_cur[i * 3 + 2], posArray_outer[i * 3 + 2], per)
           }
 
-          m.position.set(x, y, z);
+          m.position.set(x, y, z)
 
-          m.rotation.x += rotationSppedArray[i * 3];
-          m.rotation.y += rotationSppedArray[i * 3 + 1];
-          m.rotation.z += rotationSppedArray[i * 3 + 2];
+          m.rotation.x += rotationSppedArray[i * 3]
+          m.rotation.y += rotationSppedArray[i * 3 + 1]
+          m.rotation.z += rotationSppedArray[i * 3 + 2]
         }
       }
 
-      let show = false;
+      let show = false
 
       //////////////////////////////////////////////
       // Phase
       //////////////////////////////////////////////
-      let sec_phases;
+      let sec_phases
 
-      let pos_first;
+      let pos_first
       function effect_phase(_phase) {
         switch (_phase) {
           case 1:
-            console.log("effect_1 【meshArray_points作成】");
-            phaseCounter = 0;
-            hideMeshArray();
-            const flying = 1.0;
-            setTimeout(makeBufferGeometry, 10);
-            break;
+            console.log("effect_1 【meshArray_points作成】")
+            phaseCounter = 0
+            hideMeshArray()
+            const flying = 1.0
+            setTimeout(makeBufferGeometry, 10)
+            break
           case 2:
-            console.log("effect_2 【morph開始】");
-            meshArray_points.material.uniforms.u_R.value = 1.0;
-            meshArray_points.material.uniforms.u_G.value = 1.0;
-            meshArray_points.material.uniforms.u_B.value = 1.0;
+            console.log("effect_2 【morph開始】")
+            meshArray_points.material.uniforms.u_R.value = 1.0
+            meshArray_points.material.uniforms.u_G.value = 1.0
+            meshArray_points.material.uniforms.u_B.value = 1.0
 
-            const l = 200;
-            const geo = new THREE.SphereBufferGeometry(stepMin, 50, 50).toNonIndexed();
-            const pos_second = _particlesPosition(geo);
+            const l = 200
+            const geo = new THREE.SphereBufferGeometry(
+              stepMin,
+              50,
+              50,
+            ).toNonIndexed()
+            const pos_second = _particlesPosition(geo)
 
-            _bufferGeometry.setAttribute("position_second", new THREE.BufferAttribute(pos_second, 3));
-            break;
+            _bufferGeometry.setAttribute(
+              "position_second",
+              new THREE.BufferAttribute(pos_second, 3),
+            )
+            break
           case 3:
-            console.log("effect_3 【次のエフェクト】");
-            showTouchBtn(false);
-            readyCount = false;
+            console.log("effect_3 【次のエフェクト】")
+            showTouchBtn(false)
+            readyCount = false
 
-            const texLoader = new THREE.TextureLoader();
+            const texLoader = new THREE.TextureLoader()
             texLoader.load("./img/tex_09.jpg", function (texture) {
-              const geo2 = new THREE.SphereBufferGeometry(stepMin + 2, 10, 10);
+              const geo2 = new THREE.SphereBufferGeometry(stepMin + 2, 10, 10)
               const mat = new THREE.MeshPhongMaterial({
                 color: 0xffffff,
                 transparent: true,
                 opacity: 0.0,
                 map: texture,
-              });
+              })
 
-              const icosahefronGeometry = new THREE.IcosahedronBufferGeometry(stepMin, 2);
+              const icosahefronGeometry = new THREE.IcosahedronBufferGeometry(
+                stepMin,
+                2,
+              )
               // positionsArray.push(_particlesPosition(icosahefronGeometry));
 
-              const sphere_real = new THREE.Mesh(icosahefronGeometry, mat);
-              scene.add(sphere_real);
+              const sphere_real = new THREE.Mesh(icosahefronGeometry, mat)
+              scene.add(sphere_real)
 
               // let i = 0;
               // let fn = function () {
@@ -674,18 +726,18 @@
               gsap.to(mat, {
                 opacity: 1.0,
                 duration: 5.0,
-              });
+              })
 
-              const dur = 3.0;
+              const dur = 3.0
               gsap.to(meshArray_points.material.uniforms.u_A, {
                 value: 0.0,
                 duration: dur,
                 onComplete: () => {
-                  scene.remove(meshArray_points);
-                  meshArray_points.material.dispose();
-                  meshArray_points.geometry.dispose();
+                  scene.remove(meshArray_points)
+                  meshArray_points.material.dispose()
+                  meshArray_points.geometry.dispose()
                 },
-              });
+              })
 
               // const to = 0.8;
               // gsap.to(meshArray_points.scale, {
@@ -700,59 +752,62 @@
               //   z: to,
               //   duration: dur,
               // });
-            });
+            })
 
             // phase = 4;
 
-            break;
+            break
           default:
-            break;
+            break
         }
       }
 
       //////////////////////////////////////////////
       // Phase sub 1
       //////////////////////////////////////////////
-      let sec_phase_1;
+      let sec_phase_1
 
-      const meshGeometries = [];
-      let meshArray_points; // _meshArrayをpointsオブジェクトに変換
-      let effect_phase_1_done = false;
+      const meshGeometries = []
+      let meshArray_points // _meshArrayをpointsオブジェクトに変換
+      let effect_phase_1_done = false
 
-      const dur_01 = 4.0;
+      const dur_01 = 4.0
       function hideMeshArray() {
         for (let i = 0; i < _meshArray.length; i++) {
-          const m = _meshArray[i].material;
-          m.color = new THREE.Color(0xff00ff);
-          m.transparent = 0;
+          const m = _meshArray[i].material
+          m.color = new THREE.Color(0xff00ff)
+          m.transparent = 0
           gsap.to(m, {
             opacity: 0.0,
             duration: dur_01,
             onComplete: () => {
-              m.visible = false;
+              m.visible = false
             },
-          });
+          })
         }
       }
 
-      let _bufferGeometry;
+      let _bufferGeometry
       function makeBufferGeometry() {
         // ジオメトリを結合
         let geo = THREE.BufferGeometryUtils.mergeBufferGeometries(
           _meshArray.map((m) => {
             // materials.push(b.material);
             // needs to be done to be sure that all transformations are applied
-            m.clone().updateMatrixWorld(true);
-            return m.geometry.clone().applyMatrix4(m.matrixWorld);
+            m.clone().updateMatrixWorld(true)
+            return m.geometry.clone().applyMatrix4(m.matrixWorld)
           }),
-          true
-        );
+          true,
+        )
 
-        const pos = _particlesPosition(geo);
-        _bufferGeometry = new THREE.BufferGeometry();
-        _bufferGeometry.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+        const pos = _particlesPosition(geo)
+        _bufferGeometry = new THREE.BufferGeometry()
+        _bufferGeometry.setAttribute(
+          "position",
+          new THREE.BufferAttribute(pos, 3),
+        )
 
-        pos_first = pos;
+        pos_first = pos
 
         const mat = new THREE.RawShaderMaterial({
           vertexShader: document.getElementById("vertexShader").textContent,
@@ -767,7 +822,7 @@
           transparent: true,
           blending: THREE.AdditiveBlending,
           depthTest: false,
-        });
+        })
 
         // const pMaterial = new THREE.PointsMaterial({
         //   size: 0.2,
@@ -776,24 +831,24 @@
         //   opacity: 0,
         // });
 
-        meshArray_points = new THREE.Points(_bufferGeometry, mat);
-        scene.add(meshArray_points);
-        const k = 1.0;
-        meshArray_points.scale.set(k, k, k);
+        meshArray_points = new THREE.Points(_bufferGeometry, mat)
+        scene.add(meshArray_points)
+        const k = 1.0
+        meshArray_points.scale.set(k, k, k)
 
-        bufferGeometryMaken = true;
+        bufferGeometryMaken = true
 
-        meshArray_points.material.uniforms.u_R.value = Math.random();
-        meshArray_points.material.uniforms.u_G.value = Math.random();
-        meshArray_points.material.uniforms.u_B.value = Math.random();
+        meshArray_points.material.uniforms.u_R.value = Math.random()
+        meshArray_points.material.uniforms.u_G.value = Math.random()
+        meshArray_points.material.uniforms.u_B.value = Math.random()
 
         gsap.to(meshArray_points.material.uniforms.u_A, {
           value: 0.7,
           duration: 3.0,
           // delay: 0.8,
-        });
+        })
 
-        setTimeout(cameraZoom, 2000);
+        setTimeout(cameraZoom, 2000)
 
         // points_meshArrayを表示
         // const m = meshArray_points.material;
@@ -805,19 +860,19 @@
         // });
       }
 
-      let readyCameraZoom = false;
-      let cameraStartPos;
+      let readyCameraZoom = false
+      let cameraStartPos
 
       function updateCameraZoom() {
-        camera.position.x = lerp(cameraStartPos.x, 0, camera._zoomFacfor);
-        camera.position.y = lerp(cameraStartPos.y, 0, camera._zoomFacfor);
-        camera.position.z = lerp(cameraStartPos.z, 0, camera._zoomFacfor);
+        camera.position.x = lerp(cameraStartPos.x, 0, camera._zoomFacfor)
+        camera.position.y = lerp(cameraStartPos.y, 0, camera._zoomFacfor)
+        camera.position.z = lerp(cameraStartPos.z, 0, camera._zoomFacfor)
       }
 
       function cameraZoom() {
-        cameraStartPos = camera.position;
+        cameraStartPos = camera.position
 
-        readyCameraZoom = true;
+        readyCameraZoom = true
         gsap.to(camera, {
           _zoomFacfor: 0.003,
           duration: 2.0,
@@ -825,64 +880,64 @@
           onComplete: () => {
             // m.visible = false;
             // アニメーション終了時の処理
-            readyCameraZoom = false;
-            console.log("拡大！");
-            showTouchBtn(true);
+            readyCameraZoom = false
+            console.log("拡大！")
+            showTouchBtn(true)
 
-            phase = 2;
-            console.log("phase: 2");
-            countUp = true;
-            phaseCounter = 0;
+            phase = 2
+            console.log("phase: 2")
+            countUp = true
+            phaseCounter = 0
           },
-        });
+        })
       }
 
       //////////////////////////////////////////////
       // その他
       //////////////////////////////////////////////
-      let sec_misc;
+      let sec_misc
 
       function showTouchBtn(show) {
         gsap.to(".tap", {
           opacity: show ? 1.0 : 0.0,
           duration: 3.0,
-        });
+        })
       }
 
-      var makePictureFlag = false;
+      var makePictureFlag = false
 
       //画像作成用イベント
       window.addEventListener("keydown", function (e) {
         //キーボードイベント時のキー取得
-        var keyChar = String.fromCharCode(e.keyCode).toLowerCase();
+        var keyChar = String.fromCharCode(e.keyCode).toLowerCase()
 
         //キーボードの「s」が押された場合
         if (keyChar == "s") {
-          makePictureFlag = true;
+          makePictureFlag = true
         }
-      });
+      })
 
       //画像作成関数
       function makePicture() {
-        if (!makePictureFlag) return;
+        if (!makePictureFlag) return
 
         //グラフィックスが描画されたcanvas要素
-        var canvas = renderer.domElement;
+        var canvas = renderer.domElement
 
         //a要素の生成
-        var a = document.createElement("a");
+        var a = document.createElement("a")
         //canvas要素→DataURL形式
-        a.href = canvas.toDataURL("image/png");
+        a.href = canvas.toDataURL("image/png")
         //PNGファイル名の命名
-        a.download = "picture";
-        a.innerHTML = "ダウンロード";
+        a.download = "picture"
+        a.innerHTML = "ダウンロード"
 
-        a.dispatchEvent(new PointerEvent("click"));
+        a.dispatchEvent(new PointerEvent("click"))
 
         //id="thumbnails"のdiv要素の子要素にa要素を追加
-        document.getElementsByTagName("body")[0].appendChild(a);
+        document.getElementsByTagName("body")[0].appendChild(a)
 
-        makePictureFlag = false;
+        makePictureFlag = false
       }
     </script>
     <script id="vertexShader" type="x-shader/x-vertex">
